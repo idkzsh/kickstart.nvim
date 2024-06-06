@@ -3,13 +3,9 @@
 
 ## Introduction
 
-A starting point for Neovim that is:
-
-* Small
-* Single-file
-* Completely Documented
-
-**NOT** a Neovim distribution, but instead a starting point for your configuration.
+This is my (idkz/idkzsh) customization on top of kickstart. It has all the included plugins
+and configurations from kickstart and whatever else I added to it after. Mainly, as a backup
+for quick installation if I ever need to get Neovim on another computer.
 
 ## Installation
 
@@ -50,41 +46,23 @@ Neovim's configurations are located under the following paths, depending on your
 | Windows (cmd)| `%userprofile%\AppData\Local\nvim\` |
 | Windows (powershell)| `$env:USERPROFILE\AppData\Local\nvim\` |
 
-#### Recommended Step
-
-[Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) this repo
-so that you have your own copy that you can modify, then install by cloning the
-fork to your machine using one of the commands below, depending on your OS.
-
-> **NOTE**
-> Your fork's url will be something like this:
-> `https://github.com/<your_github_username>/kickstart.nvim.git`
-
-#### Clone kickstart.nvim
-> **NOTE**
-> If following the recommended step above (i.e., forking the repo), replace
-> `nvim-lua` with `<your_github_username>` in the commands below
-
-<details><summary> Linux and Mac </summary>
+Linux and Mac
 
 ```sh
-https://github.com/idkzsh/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+git clone https://github.com/idkzsh/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
 ```
 
-</details>
+Windows
 
-<details><summary> Windows </summary>
-
-If you're using `cmd.exe`:
+cmd.exe
 
 ```
-git clone https://github.com/nvim-lua/kickstart.nvim.git %userprofile%\AppData\Local\nvim\
+git clone https://github.com/idkzsh/kickstart.nvim.git %userprofile%\AppData\Local\nvim\
 ```
-
-If you're using `powershell.exe`
+powershell.exe
 
 ```
-git clone https://github.com/nvim-lua/kickstart.nvim.git $env:USERPROFILE\AppData\Local\nvim\
+git clone https://github.com/idkzsh/kickstart.nvim.git  $env:USERPROFILE\AppData\Local\nvim\
 ```
 
 </details>

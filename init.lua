@@ -267,6 +267,13 @@ require('lazy').setup({
       }
     end,
   },
+  {
+    'mattn/emmet-vim', -- Emmet plugin for Vim/Neovim
+    config = function()
+      -- You can place any configuration code here, for example:
+      vim.api.nvim_set_keymap('i', '<C-E>', '<Plug>(emmet-expand-abbr)', { noremap = true })
+    end,
+  },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
