@@ -189,6 +189,7 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', '<A-S-d>', 'yyp', { noremap = true, silent = true })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -203,6 +204,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+if vim.fn.has 'termguicolors' == 1 then
+  vim.o.termguicolors = true
+end
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -223,6 +228,7 @@ vim.opt.rtp:prepend(lazypath)
 --  To update plugins you can run
 --    :Lazy update
 --
+
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -429,8 +435,9 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
-      { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
+      { 'williamboman/mason.nvim', opts = { ensure_installed = { 'prettier' } }, dependenciesconfig = true }, -- NOTE: Must be loaded before dependants
       'williamboman/mason-lspconfig.nvim',
+
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -582,9 +589,9 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
+        clangd = {},
+        gopls = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -592,8 +599,8 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
-        --
+        tsserver = {},
+        astro = {},
 
         lua_ls = {
           -- cmd = {...},
@@ -674,7 +681,9 @@ require('lazy').setup({
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
+        javascript = { { 'prettier', 'prettier' } },
+        html = { 'prettier' },
+        astro = { 'prettierd' },
       },
     },
   },
