@@ -102,7 +102,7 @@ vim.g.have_nerd_font = true
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -209,6 +209,14 @@ if vim.fn.has 'termguicolors' == 1 then
   vim.o.termguicolors = true
 end
 
+-- Matching Brace highlighting
+vim.api.nvim_create_autocmd('ColorScheme', {
+  pattern = '*',
+  callback = function()
+    vim.api.nvim_set_hl(0, 'MatchParen', { bg = '#03fcad', fg = '#000000', bold = true })
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -228,7 +236,6 @@ vim.opt.rtp:prepend(lazypath)
 --  To update plugins you can run
 --    :Lazy update
 --
-
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -302,7 +309,7 @@ require('lazy').setup({
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    config = function()
+    config = function() -- This is the function that runs, AFTER loading
       require('which-key').setup()
       require('which-key').add {
         { '<leader>c', group = '[C]ode' },
@@ -806,37 +813,11 @@ require('lazy').setup({
     end,
   },
 
-  { -- Colorscheme
-    'loctvl842/monokai-pro.nvim',
+  {
+    'folke/tokyonight.nvim',
     priority = 1000,
     config = function()
-      require('monokai-pro').setup {
-        transparent_background = false,
-        terminal_colors = true,
-        devicons = true,
-        filter = 'classic', -- classic | octagon | pro | machine | ristretto | spectrum
-        day_night = {
-          enable = false,
-        },
-        inc_search = 'background', -- underline | background
-        background_clear = {},
-        plugins = {
-          bufferline = {
-            underline_selected = false,
-            underline_visible = false,
-          },
-          treesitter = true,
-        },
-        override = function(c)
-          return {
-            Normal = { bg = c.base.black },
-            NormalFloat = { bg = c.base.black },
-          }
-        end,
-      }
-
-      vim.cmd.colorscheme 'monokai-pro'
-      vim.cmd.hi 'Comment gui=none'
+      vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
 
@@ -940,7 +921,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
