@@ -63,7 +63,7 @@ vim.opt.inccommand = 'split'
 
 -- Show which line your cursor is on
 vim.opt.cursorline = true
-vim.opt.guicursor = 'n-v-c:block-blinkon500-blinkoff500-blinkwait500,i-ci-ve:ver25-blinkon500-blinkoff500-blinkwait500'
+vim.opt.guicursor = 'n-v-c:block,i-ci-ve:block-blinkon500-blinkoff500-blinkwait500'
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 20
 
@@ -111,14 +111,34 @@ vim.keymap.set('n', '<A-S-d>', 'yyp', { noremap = true, silent = true })
 vim.api.nvim_create_autocmd('ColorScheme', {
   pattern = '*',
   callback = function()
+    local fg = vim.o.background == 'dark' and '#ffffff' or '#000000'
+    local bg = vim.o.background == 'dark' and '#000000' or '#ffffff'
+    local func_color = vim.o.background == 'dark' and '#D7FA3C' or '#a3c72e'
+    local var_color = vim.o.background == 'dark' and '#5bc8af' or '#41a18b'
+    local comm_color = vim.o.background == 'dark' and '#8b8b8b' or '#5e5e5e'
     vim.api.nvim_set_hl(0, 'Visual', { bg = '#03fcad', fg = '#000000', bold = true })
     vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
     vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
     vim.api.nvim_set_hl(0, '@keyword', { fg = '#c061cb' })
     vim.api.nvim_set_hl(0, '@keyword.function', { fg = '#c061cb' })
+    vim.api.nvim_set_hl(0, '@function', { fg = func_color })
     vim.api.nvim_set_hl(0, '@function.method.call', { fg = '#206e52' })
-    vim.api.nvim_set_hl(0, '@constant.builtin', { fg = '#1a596e' })
-    vim.api.nvim_set_hl(0, '@number', { fg = '#512663' })
+    vim.api.nvim_set_hl(0, '@type.builtin', { fg = '#367583', bold = true })
+    vim.api.nvim_set_hl(0, '@constant.builtin', { fg = '#D92F76' })
+    vim.api.nvim_set_hl(0, '@number', { fg = '#5C63B2' })
+    vim.api.nvim_set_hl(0, '@boolean', { fg = '#5C63B2' })
+    vim.api.nvim_set_hl(0, '@variable', { fg = var_color })
+    vim.api.nvim_set_hl(0, '@comment', { fg = comm_color, italic = true, underline = true })
+    vim.api.nvim_set_hl(0, 'MatchParen', { bg = '#f99729', fg = '#000000', bold = true })
+    vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+    vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+    vim.api.nvim_set_hl(0, '@string', { fg = fg, italic = true })
+    vim.api.nvim_set_hl(0, '@type.definition', { fg = '#fe4533' })
+    vim.api.nvim_set_hl(0, '@punctuation.special', { fg = '#fe4533', italic = true })
+
+    -- javascript specific
+    vim.api.nvim_set_hl(0, '@lsp.typemod.variable.defaultLibrary.javascript', { fg = fg })
+    vim.api.nvim_set_hl(0, '@variable.member.javascript', { fg = '#D92F76' })
   end,
 })
 
@@ -137,14 +157,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 if vim.fn.has 'termguicolors' == 1 then
   vim.o.termguicolors = true
 end
-
--- Matching Brace highlighting
-vim.api.nvim_create_autocmd('ColorScheme', {
-  pattern = '*',
-  callback = function()
-    vim.api.nvim_set_hl(0, 'MatchParen', { bg = '#03fcad', fg = '#000000', bold = true })
-  end,
-})
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -167,13 +179,6 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 --
-vim.api.nvim_create_autocmd('ColorScheme', {
-  pattern = '*',
-  callback = function()
-    vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-    vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
-  end,
-})
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
@@ -628,6 +633,7 @@ require('lazy').setup({
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
         javascript = { 'prettier', 'prettierd' },
+        json = { 'prettier' },
         html = { 'prettier' },
       },
     },
@@ -758,7 +764,6 @@ require('lazy').setup({
     -- configure and set on startup
     config = function()
       vim.g.adwaita_darker = true -- for darker version
-      vim.g.adwaita_disable_cursorline = true -- to disable cursorline
       vim.g.adwaita_transparent = true -- makes the background transparent
       vim.cmd 'colorscheme adwaita'
     end,
